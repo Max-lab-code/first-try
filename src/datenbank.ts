@@ -51,9 +51,13 @@ async function abrufen(eintrag: CollectionEntry<'eintraege'>): Promise<Anreicher
 }
 
 async function json(url: string, headers: Record<string, string> = {}) {
-  const antwort = await fetch(url, { headers: { 'User-Agent': USER_AGENT, ...headers }, signal: AbortSignal.timeout(15000) });
-  if (!antwort.ok) throw new Error(`${antwort.status} bei ${url}`);
-  return antwort.json();
+  // MusicBrainz antwortet bei Andrang mit 503, dann kurz warten und nochmal versuchen.
+  for (let versuch = 1; ; versuch++) {
+    const antwort = await fetch(url, { headers: { 'User-Agent': USER_AGENT, ...headers }, signal: AbortSignal.timeout(15000) });
+    if (antwort.ok) return antwort.json();
+    if (antwort.status !== 503 || versuch === 3) throw new Error(`${antwort.status} bei ${url}`);
+    await new Promise((r) => setTimeout(r, 2000 * versuch));
+  }
 }
 
 async function bildGibtEs(url: string) {
