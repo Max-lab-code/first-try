@@ -1,0 +1,74 @@
+---
+interface Props {
+  titel?: string;
+}
+const { titel } = Astro.props;
+const seitentitel = titel ? `${titel} · Fundstücke` : 'Fundstücke';
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{seitentitel}</title>
+  </head>
+  <body>
+    <header>
+      <a class="logo" href={import.meta.env.BASE_URL}>Fundstücke</a>
+      <p class="untertitel">Filme, Bücher, Platten und Ausstellungen, die man sonst nicht findet.</p>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --papier: #f6f1e7;
+    --tinte: #221f1a;
+    --grau: #6b645a;
+    --linie: #ddd3c2;
+    --akzent: #b4462b;
+    --karte: #fffaf1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --papier: #1b1917;
+      --tinte: #eee7da;
+      --grau: #a79f92;
+      --linie: #38332d;
+      --akzent: #e07a5a;
+      --karte: #24211e;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--papier);
+    color: var(--tinte);
+    font: 17px/1.6 Georgia, 'Times New Roman', serif;
+  }
+  header, main {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  header { padding-top: 2.5rem; padding-bottom: 1.5rem; }
+  .logo {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--tinte);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .untertitel { margin: 0.25rem 0 0; color: var(--grau); }
+  a { color: var(--akzent); }
+  .art {
+    font: 600 0.75rem/1 system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--akzent);
+  }
+</style>

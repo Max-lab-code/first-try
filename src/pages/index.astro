@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import Seite from '../layouts/Seite.astro';
+import { arten } from '../arten';
+
+const eintraege = (await getCollection('eintraege')).sort(
+  (a, b) => b.data.hinzugefuegt.getTime() - a.data.hinzugefuegt.getTime(),
+);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Seite>
+  <nav class="filter" aria-label="Nach Art filtern">
+    <button type="button" data-filter="alle" aria-pressed="true">Alles</button>
+    {Object.entries(arten).map(([key, name]) => (
+      <button type="button" data-filter={key} aria-pressed="false">{name}</button>
+    ))}
+  </nav>
+
+  <ul class="liste">
+    {eintraege.map((e) => (
+      <li data-art={e.data.art}>
+        <a href={`${base}/eintrag/${e.id}/`}>
+          <span class="art">{arten[e.data.art]}</span>
+          <h2>{e.data.titel}</h2>
+          <p class="von">{e.data.von}{e.data.jahr && `, ${e.data.jahr}`}</p>
+          <p>{e.data.teaser}</p>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Seite>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('.liste li');
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      items.forEach((item) => {
+        item.hidden = filter !== 'alle' && item.dataset.art !== filter;
+      });
+    });
+  });
+</script>
+
+<style>
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .filter button {
+    font: 0.9rem system-ui, sans-serif;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--linie);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--tinte);
+    cursor: pointer;
+  }
+  .filter button[aria-pressed='true'] {
+    background: var(--tinte);
+    color: var(--papier);
+    border-color: var(--tinte);
+  }
+  .liste {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1rem;
+  }
+  .liste a {
+    display: block;
+    height: 100%;
+    padding: 1.25rem;
+    background: var(--karte);
+    border: 1px solid var(--linie);
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.15s;
+  }
+  .liste a:hover { transform: translateY(-2px); }
+  h2 { margin: 0.5rem 0 0; font-size: 1.35rem; line-height: 1.25; }
+  .von { margin: 0.1rem 0 0.6rem; color: var(--grau); font-size: 0.95rem; }
+  .liste p:last-child { margin: 0; }
+</style>
