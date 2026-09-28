@@ -3,6 +3,8 @@ name: Website veröffentlichen
 on:
   push:
     branches: [main]
+  # Bei Pull Requests wird nur zur Probe gebaut, nicht veröffentlicht.
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -21,6 +23,7 @@ jobs:
       - uses: withastro/action@v5
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
