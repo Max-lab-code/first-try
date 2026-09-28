@@ -6,14 +6,20 @@ import type { CollectionEntry } from 'astro:content';
 interface Props {
   eintrag: CollectionEntry<'eintraege'>;
   gross?: boolean;
+  // Bild aus einer Datenbank (Cover oder Poster)
+  bildUrl?: string;
 }
-const { eintrag, gross = false } = Astro.props;
+const { eintrag, gross = false, bildUrl } = Astro.props;
 const { bild, titel, art } = eintrag.data;
 ---
 
 <div class:list={['bild', `art-${art}`, { gross }]}>
   {bild ? (
     <Image src={bild} alt={titel} widths={[400, 800, 1200]} sizes={gross ? '(max-width: 40rem) 100vw, 36rem' : '(max-width: 40rem) 100vw, 18rem'} />
+  ) : bildUrl ? (
+    <div class="cover" style={`--cover: url('${bildUrl}')`}>
+      <img src={bildUrl} alt={titel} loading="lazy" />
+    </div>
   ) : (
     <div class="motiv" aria-hidden="true">
       {art === 'film' && (
@@ -65,6 +71,24 @@ const { bild, titel, art } = eintrag.data;
     object-fit: cover;
   }
   .motiv { width: 100%; height: 100%; }
+  /* Cover und Poster haben andere Formate: ganz zeigen, dahinter unscharf vergrößert */
+  .cover {
+    position: relative;
+    height: 100%;
+    background: var(--cover) center / cover;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(18px) brightness(0.7);
+  }
+  .bild .cover img {
+    position: relative;
+    object-fit: contain;
+    padding: 0.75rem 0;
+    filter: drop-shadow(0 4px 12px rgb(0 0 0 / 0.35));
+  }
   svg { width: 100%; height: 100%; }
   svg :global(*) { stroke: currentColor; }
   svg :global(rect:not([fill='none'])),

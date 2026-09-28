@@ -13,6 +13,9 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Schlüssel für die Filmdatenbank, eingetragen unter Settings → Secrets and variables → Actions
+      TMDB_TOKEN: ${{ secrets.TMDB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: withastro/action@v5

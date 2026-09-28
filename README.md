@@ -23,6 +23,15 @@ hinzugefuegt: 2026-09-28
 Hier steht der längere Text, der auf der Seite des Eintrags erscheint.
 ```
 
+Bei Büchern, Platten und Filmen sucht die Seite beim Veröffentlichen automatisch nach Titel und „von“
+in freien Datenbanken (Open Library, MusicBrainz, TMDB) und holt Cover oder Poster sowie fehlende Angaben
+wie Jahr und Regie. Findet sie den falschen Treffer, hilft es, `von` und `jahr` genauer anzugeben.
+Mit `datenbank: false` schaltest du die Suche für einen Eintrag ab. Ein eigenes `bild` hat immer Vorrang.
+
+Für Filme braucht die Seite einen TMDB-Schlüssel. Er wird auf GitHub unter
+Settings → Secrets and variables → Actions als Secret mit dem Namen `TMDB_TOKEN` eingetragen
+(dort den „API Read Access Token“ von TMDB verwenden).
+
 Ohne Bild zeigt die Kachel ein gestaltetes Motiv passend zur Art. Nimm nur Bilder, die du verwenden darfst,
 zum Beispiel eigene Fotos oder Pressebilder von Verleihen, Verlagen, Labels und Museen.
 

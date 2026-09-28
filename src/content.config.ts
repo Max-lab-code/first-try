@@ -9,13 +9,15 @@ const eintraege = defineCollection({
   schema: ({ image }) => z.object({
     titel: z.string(),
     art: z.enum(['film', 'buch', 'platte', 'ausstellung']),
-    von: z.string(),
+    von: z.string().optional(),
     jahr: z.number().optional(),
     teaser: z.string(),
     link: z.string().url().optional(),
     // Bild liegt neben der Markdown-Datei, z. B. bild: ./stoner.jpg
     bild: image().optional(),
     bildnachweis: z.string().optional(),
+    // false schaltet die automatische Suche in den Datenbanken ab
+    datenbank: z.boolean().optional(),
     hinzugefuegt: z.coerce.date(),
   }),
 });
