@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Seite from '../layouts/Seite.astro';
 import { arten } from '../arten';
+import Bild from '../components/Bild.astro';
 
 const eintraege = (await getCollection('eintraege')).sort(
   (a, b) => b.data.hinzugefuegt.getTime() - a.data.hinzugefuegt.getTime(),
@@ -21,10 +22,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     {eintraege.map((e) => (
       <li data-art={e.data.art}>
         <a href={`${base}/eintrag/${e.id}/`}>
+          <Bild eintrag={e} />
+          <div class="text">
           <span class="art">{arten[e.data.art]}</span>
           <h2>{e.data.titel}</h2>
           <p class="von">{e.data.von}{e.data.jahr && `, ${e.data.jahr}`}</p>
           <p>{e.data.teaser}</p>
+          </div>
         </a>
       </li>
     ))}
@@ -77,7 +81,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   .liste a {
     display: block;
     height: 100%;
-    padding: 1.25rem;
+    overflow: hidden;
     background: var(--karte);
     border: 1px solid var(--linie);
     border-radius: 8px;
@@ -86,6 +90,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     transition: transform 0.15s;
   }
   .liste a:hover { transform: translateY(-2px); }
+  .text { padding: 1rem 1.25rem 1.25rem; }
   h2 { margin: 0.5rem 0 0; font-size: 1.35rem; line-height: 1.25; }
   .von { margin: 0.1rem 0 0.6rem; color: var(--grau); font-size: 0.95rem; }
   .liste p:last-child { margin: 0; }

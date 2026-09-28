@@ -6,13 +6,16 @@ import { z } from 'astro/zod';
 // Oben stehen die Eckdaten, darunter der kurze Text, der neugierig macht.
 const eintraege = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/eintraege' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     titel: z.string(),
     art: z.enum(['film', 'buch', 'platte', 'ausstellung']),
     von: z.string(),
     jahr: z.number().optional(),
     teaser: z.string(),
     link: z.string().url().optional(),
+    // Bild liegt neben der Markdown-Datei, z. B. bild: ./stoner.jpg
+    bild: image().optional(),
+    bildnachweis: z.string().optional(),
     hinzugefuegt: z.coerce.date(),
   }),
 });

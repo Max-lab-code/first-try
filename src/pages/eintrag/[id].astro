@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Seite from '../../layouts/Seite.astro';
 import { arten } from '../../arten';
+import Bild from '../../components/Bild.astro';
 
 export async function getStaticPaths() {
   const eintraege = await getCollection('eintraege');
@@ -18,6 +19,8 @@ const d = eintrag.data;
     <span class="art">{arten[d.art]}</span>
     <h1>{d.titel}</h1>
     <p class="von">{d.von}{d.jahr && `, ${d.jahr}`}</p>
+    <Bild eintrag={eintrag} gross />
+    {d.bildnachweis && <p class="nachweis">Bild: {d.bildnachweis}</p>}
     <p class="teaser">{d.teaser}</p>
     <Content />
     {d.link && <p><a href={d.link}>Mehr dazu</a></p>}
@@ -29,6 +32,7 @@ const d = eintrag.data;
   article { max-width: 36rem; padding-bottom: 3rem; }
   h1 { margin: 0.5rem 0 0; font-size: 2.2rem; line-height: 1.15; }
   .von { margin: 0.2rem 0 1.5rem; color: var(--grau); }
+  .nachweis { margin: -1rem 0 1.5rem; font: 0.8rem system-ui, sans-serif; color: var(--grau); }
   .teaser { font-size: 1.2rem; font-style: italic; }
   .zurueck { margin-top: 2.5rem; font-family: system-ui, sans-serif; font-size: 0.9rem; }
 </style>

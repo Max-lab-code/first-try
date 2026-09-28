@@ -15,11 +15,16 @@ von: Céline Sciamma  # Regie, Autorin, Band oder Ort
 jahr: 2021           # optional
 teaser: Ein Satz, der neugierig macht.
 link: https://...    # optional
+bild: ./mein-film.jpg  # optional, Bild liegt im selben Ordner
+bildnachweis: Verleih XY  # optional, wer das Bild gemacht hat
 hinzugefuegt: 2026-09-28
 ---
 
 Hier steht der längere Text, der auf der Seite des Eintrags erscheint.
 ```
+
+Ohne Bild zeigt die Kachel ein gestaltetes Motiv passend zur Art. Nimm nur Bilder, die du verwenden darfst,
+zum Beispiel eigene Fotos oder Pressebilder von Verleihen, Verlagen, Labels und Museen.
 
 Sobald die Änderung auf `main` landet, wird die Seite automatisch neu veröffentlicht.
 
