@@ -19,10 +19,17 @@ export function anreichern(eintrag: CollectionEntry<'eintraege'>): Promise<Anrei
   if (!cache.has(eintrag.id)) {
     cache.set(
       eintrag.id,
-      abrufen(eintrag).catch((fehler) => {
-        console.warn(`[datenbank] ${eintrag.id}: ${fehler}`);
-        return {};
-      }),
+      abrufen(eintrag)
+        .then((ergebnis) => {
+          if (ergebnis.quelle) {
+            console.log(`[datenbank] ${eintrag.id}: ${ergebnis.quelle}, ${ergebnis.bildUrl ? 'mit' : 'ohne'} Bild`);
+          }
+          return ergebnis;
+        })
+        .catch((fehler) => {
+          console.warn(`[datenbank] ${eintrag.id}: ${fehler}`);
+          return {};
+        }),
     );
   }
   return cache.get(eintrag.id)!;
